@@ -4,6 +4,23 @@ from art_manager import art_manager
 class Card:
     """カード一枚一枚を表すクラス"""
 
+    SUITS = ['♠', '♣', '♥', '♦']
+    CARD_SCORE = {
+        'A': {'score': 11, 'is_ace': True},
+        '2': {'score': 2},
+        '3': {'score': 3},
+        '4': {'score': 4},
+        '5': {'score': 5},
+        '6': {'score': 6},
+        '7': {'score': 7},
+        '8': {'score': 8},
+        '9': {'score': 9},
+        '10': {'score': 10},
+        'J': {'score': 10},
+        'Q': {'score': 10},
+        'K': {'score': 10},
+    }
+
     def __init__(self, suit, rank, score):
         self.suit = suit  # スート(♠, ♣, ♥, ♦)のこと
         self.rank = rank  # 絵柄(A, 2, 3, ..., 10, J, Q, K)のこと
@@ -33,3 +50,9 @@ class Card:
 
     def __repr__(self):
         return f'{self.suit}{self.rank}'
+
+
+if __name__ == '__main__':
+    club_ace = Card('♣', 'A', {'score': 11, 'is_ace': True})
+    print(club_ace)
+    club_ace.show_card()
