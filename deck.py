@@ -7,7 +7,8 @@ class Deck:
     def __init__(self):
         self.card_list = []
 
-    def create_card_list(self):
+    def create_deck(self):
+        self.card_list = []
         for suit in Card.SUITS:
             for rank, score in Card.CARD_SCORE.items():
                 self.card_list.append(Card(suit, rank, score))
@@ -15,9 +16,8 @@ class Deck:
 
 if __name__ == '__main__':
     deck = Deck()
-    deck.create_card_list()
+    deck.create_deck()
     for card in deck.card_list:
         card.show_card(show_face=True, show_score=True)
         print(card)
-
     print(deck.card_list)
