@@ -1,10 +1,19 @@
+import colorama
 from art_manager import art_manager
+
+colorama.init(autoreset=True)
 
 
 class Card:
     """カード一枚一枚を表すクラス"""
 
-    SUITS = ['♠', '♣', '♥', '♦']
+    SUITS = {
+        '♣': colorama.Fore.RESET,
+        '♥': colorama.Fore.RED,
+        '♠': colorama.Fore.RESET,
+        '♦': colorama.Fore.RED
+    }
+
     CARD_SCORE = {
         'A': {'score': 11, 'is_ace': True},
         '2': {'score': 2},
@@ -33,7 +42,8 @@ class Card:
         :return: カードのアスキーアート
         """
 
-        return art_manager.card_face.format(self.rank.ljust(2, " "), self.suit, self.rank.rjust(2, "_"))
+        colored_suit = f"{self.SUITS[self.suit]}{self.suit}" + colorama.Fore.RESET
+        return art_manager.card_face.format(self.rank.ljust(2, " "), colored_suit, self.rank.rjust(2, "_"))
 
     def show_card(self, show_face=True, show_score=False):
         """
@@ -45,11 +55,12 @@ class Card:
         card_aa = self._create_card_ascii_art() if show_face else art_manager.card_back
         if show_score:
             score = f'{self.score}' if not self.is_ace else f'{self.score} or {self.score - 10}'
-            card_aa += f' {score}点'
-        print(card_aa)
+            print(f'{card_aa} {score}点')
+        else:
+            print(card_aa)
 
     def __repr__(self):
-        return f'{self.suit}{self.rank}'
+        return f'{self.SUITS[self.suit]}{self.suit}{self.rank}'
 
 
 if __name__ == '__main__':
