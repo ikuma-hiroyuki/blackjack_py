@@ -62,4 +62,3 @@ class ArtManager:
 
 
 art_manager = ArtManager()
-print(art_manager.bust)
