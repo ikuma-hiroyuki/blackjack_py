@@ -42,6 +42,27 @@ class Player:
             ace_count -= 1
         self.score = adjusted_score
 
+    def show_all_card_face(self):
+        """複数のカードを横一列で表示する"""
+
+        line1_list = []
+        line2_list = []
+        line3_list = []
+        line4_list = []
+
+        for card in self.hand:
+            line1, line2, line3, line4 = card.get_card_art().splitlines()
+            line1_list.append(line1.ljust(5, " "))
+            line2_list.append(line2.ljust(5, " "))
+            line3_list.append(line3.ljust(5, " "))
+            line4_list.append(line4.ljust(5, " "))
+
+        print("  ".join(line1_list))
+        print("  ".join(line2_list))
+        print("  ".join(line3_list))
+        print("  ".join(line4_list))
+        print(f'スコア: {self.score}点')
+
     def reset_game(self):
         """ゲームをリセット"""
 
@@ -56,3 +77,10 @@ class User(Player):
     def __init__(self):
         super().__init__('ユーザー')
         self.money = 0
+
+
+if __name__ == '__main__':
+    user = User()
+    user.hit()
+    user.hit()
+    user.show_all_card_face()
