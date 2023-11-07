@@ -11,7 +11,7 @@ class Deck:
     def _create_deck(self):
         for suit in Card.SUITS:
             for rank, score in Card.CARD_SCORE.items():
-                self.card_list.append(Card(suit, rank, score))
+                self.card_list.append(Card(suit, rank))
 
 
 if __name__ == '__main__':

@@ -1,7 +1,8 @@
 import colorama
+
 from art_manager import art_manager
 
-colorama.init(autoreset=True)
+BLACK_JACK_VALUE = 21
 
 
 class Card:
@@ -30,11 +31,11 @@ class Card:
         'K': {'score': 10},
     }
 
-    def __init__(self, suit, rank, score):
+    def __init__(self, suit, rank):
         self.suit = self._set_color(suit, suit)  # スート(♠, ♣, ♥, ♦)のこと
         self.rank = self._set_color(suit, rank)  # 絵柄(A, 2, 3, ..., 10, J, Q, K)のこと
-        self.score = score['score']  # ランクの得点
-        self.is_ace = score.get('is_ace', False)  # A かどうか
+        self.score = self.CARD_SCORE[rank]['score']  # ランクの得点
+        self.is_ace = self.CARD_SCORE[rank].get('is_ace', False)  # A かどうか
 
     @classmethod
     def _set_color(cls, suit, value):
@@ -45,7 +46,7 @@ class Card:
         カードのアスキーアートを生成して返す
         :return: カードのアスキーアート
         """
-        return art_manager.card_face.format(self.rank.ljust(2, " "), self.suit, self.rank.rjust(2, "_"))
+        return art_manager.card_face.format(self.rank.ljust(12, " "), self.suit, self.rank.rjust(12, "_"))
 
     def show_card(self, show_face=True, show_score=False):
         """
@@ -63,9 +64,3 @@ class Card:
 
     def __repr__(self):
         return f'{self.suit}{self.rank}'
-
-
-if __name__ == '__main__':
-    club_ace = Card('♣', 'A', {'score': 11, 'is_ace': True})
-    print(club_ace)
-    club_ace.show_card()
