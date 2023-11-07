@@ -17,6 +17,6 @@ class Deck:
 if __name__ == '__main__':
     deck = Deck()
     for card in deck.card_list:
-        card.show_card(show_face=True, show_score=True)
-        print(card)
+        print(card.get_card_art(show_face=True))
+        print(card, card.score)
     print(deck.card_list)

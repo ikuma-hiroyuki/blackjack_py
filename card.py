@@ -48,19 +48,8 @@ class Card:
         """
         return art_manager.card_face.format(self.rank.ljust(12, " "), self.suit, self.rank.rjust(12, "_"))
 
-    def show_card(self, show_face=True, show_score=False):
-        """
-        カードのアスキーアートを表示する
-        :param show_face: カードの表を見せるか
-        :param show_score: カードの得点を表示するか
-        """
-
-        card_aa = self._create_card_ascii_art() if show_face else art_manager.card_back
-        if show_score:
-            score = f'{self.score}' if not self.is_ace else f'{self.score} or {self.score - 10}'
-            print(f'{card_aa} {score}点')
-        else:
-            print(card_aa)
+    def get_card_art(self, show_face=True):
+        return self._create_card_ascii_art() if show_face else art_manager.card_back
 
     def __repr__(self):
         return f'{self.suit}{self.rank}'
