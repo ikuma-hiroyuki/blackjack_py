@@ -31,19 +31,21 @@ class Card:
     }
 
     def __init__(self, suit, rank, score):
-        self.suit = suit  # スート(♠, ♣, ♥, ♦)のこと
-        self.rank = rank  # 絵柄(A, 2, 3, ..., 10, J, Q, K)のこと
+        self.suit = self._set_color(suit, suit)  # スート(♠, ♣, ♥, ♦)のこと
+        self.rank = self._set_color(suit, rank)  # 絵柄(A, 2, 3, ..., 10, J, Q, K)のこと
         self.score = score['score']  # ランクの得点
         self.is_ace = score.get('is_ace', False)  # A かどうか
+
+    @classmethod
+    def _set_color(cls, suit, value):
+        return f"{cls.SUITS[suit]}{value}" + colorama.Fore.RESET
 
     def _create_card_ascii_art(self):
         """
         カードのアスキーアートを生成して返す
         :return: カードのアスキーアート
         """
-
-        colored_suit = f"{self.SUITS[self.suit]}{self.suit}" + colorama.Fore.RESET
-        return art_manager.card_face.format(self.rank.ljust(2, " "), colored_suit, self.rank.rjust(2, "_"))
+        return art_manager.card_face.format(self.rank.ljust(2, " "), self.suit, self.rank.rjust(2, "_"))
 
     def show_card(self, show_face=True, show_score=False):
         """
@@ -60,7 +62,7 @@ class Card:
             print(card_aa)
 
     def __repr__(self):
-        return f'{self.SUITS[self.suit]}{self.suit}{self.rank}'
+        return f'{self.suit}{self.rank}'
 
 
 if __name__ == '__main__':
