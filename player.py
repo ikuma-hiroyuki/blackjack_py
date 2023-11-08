@@ -1,10 +1,16 @@
 import random
 
-from card import Card, BLACK_JACK_VALUE
+from card import Card, BLACK_JACK_VALUE, DEALER_MIN_VALUE
 from deck import Deck
 
 
 class Player:
+    """
+    プレイヤーを表すクラス
+
+    ヒット、スタンド、指定した枚数表向きにする、全てのカードを表向きにする、ゲームをリセットする
+    """
+
     # プレイヤー間で共通して使うデッキ
     deck = Deck()
 
@@ -61,9 +67,10 @@ class Player:
 
         print("\n".join(lines))
 
-    def show_all_card_face(self):
+    def show_all_face_and_score(self):
         """全てのカードの表を表示する"""
         self.show_card_face(num_visible_cards=len(self.hand))
+        print(f"{self.name}のスコア: {self.score}")
 
     def reset_game(self):
         """ゲームをリセット"""
@@ -81,14 +88,28 @@ class User(Player):
         self.money = 0
 
 
+class Dealer(Player):
+    def __init__(self):
+        super().__init__('ディーラー')
+
+    def hit(self):
+        """スコアが17以上になるまでカードを引く"""
+        while self.score < DEALER_MIN_VALUE:
+            super().hit()
+
+
 if __name__ == '__main__':
+    print('User')
     user = User()
     user.hit()
     user.hit()
-    user.show_all_card_face()
+    user.show_all_face_and_score()
+    print()
 
-    dealer = Player('ディーラー')
-    dealer.hit()
-    dealer.hit()
+    print('Dealer')
+    dealer = Dealer()
+    Player.hit(dealer)
+    dealer.show_card_face(1)
     dealer.hit()
     dealer.show_card_face(num_visible_cards=1)
+    dealer.show_all_face_and_score()

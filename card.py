@@ -3,6 +3,7 @@ import colorama
 from art_manager import art_manager
 
 BLACK_JACK_VALUE = 21
+DEALER_MIN_VALUE = 17
 
 
 class Card:
