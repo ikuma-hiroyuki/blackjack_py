@@ -42,26 +42,28 @@ class Player:
             ace_count -= 1
         self.score = adjusted_score
 
+    def show_card_face(self, num_visible_cards):
+        """
+        指定された数のカードの表を表示する
+
+        残りのカードは裏を表示する
+        :param num_visible_cards: 表向きにするカードの枚数
+        """
+
+        lines = [""] * 4  # カードのAAを表示するための4行分のスペースを用意
+
+        for i, card in enumerate(self.hand):
+            # カードのAAを1行ごとに分割してリストにする
+            lines_of_card = card.get_card_art(show_face=i < num_visible_cards).splitlines()
+            # 各行のカードのAAをスペースで区切って連結する
+            for j, line in enumerate(lines_of_card):
+                lines[j] += line.ljust(5) + " "
+
+        print("\n".join(lines))
+
     def show_all_card_face(self):
-        """複数のカードを横一列で表示する"""
-
-        line1_list = []
-        line2_list = []
-        line3_list = []
-        line4_list = []
-
-        for card in self.hand:
-            line1, line2, line3, line4 = card.get_card_art().splitlines()
-            line1_list.append(line1.ljust(5, " "))
-            line2_list.append(line2.ljust(5, " "))
-            line3_list.append(line3.ljust(5, " "))
-            line4_list.append(line4.ljust(5, " "))
-
-        print("  ".join(line1_list))
-        print("  ".join(line2_list))
-        print("  ".join(line3_list))
-        print("  ".join(line4_list))
-        print(f'スコア: {self.score}点')
+        """全てのカードの表を表示する"""
+        self.show_card_face(num_visible_cards=len(self.hand))
 
     def reset_game(self):
         """ゲームをリセット"""
@@ -84,3 +86,9 @@ if __name__ == '__main__':
     user.hit()
     user.hit()
     user.show_all_card_face()
+
+    dealer = Player('ディーラー')
+    dealer.hit()
+    dealer.hit()
+    dealer.hit()
+    dealer.show_card_face(num_visible_cards=1)
