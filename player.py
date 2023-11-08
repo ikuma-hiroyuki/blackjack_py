@@ -5,11 +5,7 @@ from deck import Deck
 
 
 class Player:
-    """
-    プレイヤーを表すクラス
-
-    ヒット、スタンド、指定した枚数表向きにする、全てのカードを表向きにする、ゲームをリセットする
-    """
+    """プレイヤーを表すクラス"""
 
     # プレイヤー間で共通して使うデッキ
     deck = Deck()
@@ -72,10 +68,8 @@ class Player:
         self.show_card_face(num_visible_cards=len(self.hand))
         print(f"{self.name}のスコア: {self.score}")
 
-    def reset_game(self):
-        """ゲームをリセット"""
-
-        self.deck = Deck()
+    def reset_deal(self):
+        """リセットして次の勝負に備える"""
         self.score = 0
         self.is_stand = False
         self.is_bust = False
@@ -96,6 +90,11 @@ class Dealer(Player):
         """スコアが17以上になるまでカードを引く"""
         while self.score < DEALER_MIN_VALUE:
             super().hit()
+
+    def reset_deal(self):
+        """リセットして次の勝負に備えるとともに、デッキをリセットする"""
+        super().reset_deal()
+        self.deck = Deck()
 
 
 if __name__ == '__main__':
