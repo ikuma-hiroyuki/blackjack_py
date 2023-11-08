@@ -49,6 +49,11 @@ class Card:
         return art_manager.card_face.format(self.rank.ljust(12, " "), self.suit, self.rank.rjust(12, "_"))
 
     def get_card_art(self, show_face=True):
+        """
+        カードのアスキーアートを返す
+        :param show_face: True: 表向き, False: 裏向き
+        :return: カードのアスキーアート
+        """
         return self._create_card_ascii_art() if show_face else art_manager.card_back
 
     def __repr__(self):
