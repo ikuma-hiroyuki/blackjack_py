@@ -1,7 +1,8 @@
 import random
 
-from card import Card, BLACK_JACK_VALUE, DEALER_MIN_VALUE
+from card import Card
 from deck import Deck
+from rules.score_rules import ScoreRules
 
 
 class Player:
@@ -14,7 +15,7 @@ class Player:
         self.name = name
         self.score = 0
         self.is_stand = False
-        self.is_bust = False
+        self.is_burst = False
         self.hand: list[Card] = []
 
     def hit(self):
@@ -23,8 +24,8 @@ class Player:
         random_index = random.randint(0, len(self.deck.card_list) - 1)
         self.hand.append(self.deck.card_list.pop(random_index))
         self._calculate_score()
-        if self.score > BLACK_JACK_VALUE:
-            self.is_bust = True
+        if self.score > ScoreRules.BLACK_JACK_VALUE:
+            self.is_burst = True
 
     def stand(self):
         """スタンドしてスコアを計算する"""
@@ -39,7 +40,7 @@ class Player:
         ace_count = sum(1 for card in self.hand if card.is_ace)
 
         adjusted_score = initial_score
-        while adjusted_score > BLACK_JACK_VALUE and ace_count > 0:
+        while adjusted_score > ScoreRules.BLACK_JACK_VALUE and ace_count > 0:
             adjusted_score -= 10
             ace_count -= 1
         self.score = adjusted_score
@@ -72,7 +73,7 @@ class Player:
         """リセットして次の勝負に備える"""
         self.score = 0
         self.is_stand = False
-        self.is_bust = False
+        self.is_burst = False
         self.hand = []
 
 
@@ -88,8 +89,9 @@ class Dealer(Player):
 
     def hit(self):
         """スコアが17以上になるまでカードを引く"""
-        while self.score < DEALER_MIN_VALUE:
+        while self.score < ScoreRules.DEALER_MIN_VALUE:
             super().hit()
+        super().stand()
 
     def reset_deal(self):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
