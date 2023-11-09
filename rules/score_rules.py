@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from enum import Enum
 
 
-@dataclass
-class ScoreRules:
+class ScoreRules(Enum):
     BLACK_JACK_VALUE = 21
     DEALER_MIN_VALUE = 17
