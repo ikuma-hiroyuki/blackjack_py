@@ -1,8 +1,6 @@
 import colorama
-from art_manager import ArtManager
 
-BLACK_JACK_VALUE = 21
-DEALER_MIN_VALUE = 17
+from art_manager import ArtManager
 
 
 class Card:
