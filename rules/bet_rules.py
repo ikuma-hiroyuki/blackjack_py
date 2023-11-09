@@ -1,9 +1,8 @@
-from dataclasses import dataclass
+from enum import Enum
 
 
-@dataclass
-class BetRules:
+class BetRules(Enum):
     NATURAL_BLACK_JACK = 2.5
     WIN = 2
     DRAW = 1
-    LOSE = 0
+    LOSE = -1
