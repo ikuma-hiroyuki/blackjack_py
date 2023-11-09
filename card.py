@@ -1,6 +1,5 @@
 import colorama
-
-from art_manager import art_manager
+from art_manager import ArtManager
 
 BLACK_JACK_VALUE = 21
 DEALER_MIN_VALUE = 17
@@ -8,6 +7,7 @@ DEALER_MIN_VALUE = 17
 
 class Card:
     """カード一枚一枚を表すクラス"""
+    art_manager = ArtManager()
 
     SUITS = {
         '♣': colorama.Fore.RESET,
@@ -47,7 +47,7 @@ class Card:
         カードのアスキーアートを生成して返す
         :return: カードのアスキーアート
         """
-        return art_manager.card_face.format(self.rank.ljust(12, " "), self.suit, self.rank.rjust(12, "_"))
+        return self.art_manager.card_face.format(self.rank.ljust(12, " "), self.suit, self.rank.rjust(12, "_"))
 
     def get_card_art(self, show_face=True):
         """
@@ -55,7 +55,7 @@ class Card:
         :param show_face: True: 表向き, False: 裏向き
         :return: カードのアスキーアート
         """
-        return self._create_card_ascii_art() if show_face else art_manager.card_back
+        return self._create_card_ascii_art() if show_face else self.art_manager.card_back
 
     def __repr__(self):
         return f'{self.suit}{self.rank}'

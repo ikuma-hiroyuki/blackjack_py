@@ -51,7 +51,7 @@ class ArtManager:
         return self._get_ascii_art('draw.txt')
 
     @property
-    def bust(self):
+    def burst(self):
         """バーストのアスキーアートを返す"""
         return self._get_ascii_art('bust.txt')
 
@@ -59,6 +59,3 @@ class ArtManager:
     def title(self):
         """タイトルのアスキーアートを返す"""
         return self._get_ascii_art('title.txt')
-
-
-art_manager = ArtManager()
