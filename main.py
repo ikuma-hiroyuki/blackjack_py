@@ -1,28 +1,9 @@
 import os
-from enum import Enum, auto
 
 from art_manager import ArtManager
-from player import User, Dealer, Player
+from player import User, Dealer, Player, UserGameState, UserState
 from rules.bet_rules import BetRules
 from rules.score_rules import ScoreRules
-
-
-class UserGameState(Enum):
-    """ユーザーの勝敗結果状態を表す列挙型"""
-    INIT = auto()
-    WIN = auto()
-    DRAW = auto()
-    LOSE = auto()
-
-
-class UserState:
-    """ユーザーの状態を管理するクラス"""
-
-    def __init__(self):
-        self.game_result = UserGameState.INIT
-        self.bet_amount = 0
-        self.bet_distribute_rate = 0
-        self.is_natural_blackjack = False
 
 
 class GameManager:
