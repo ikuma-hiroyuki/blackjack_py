@@ -1,7 +1,8 @@
 import pytest
 
 import player
-from card import Card, BLACK_JACK_VALUE
+from card import Card
+from rules.score_rules import ScoreRules
 
 
 class TestPlayer:
@@ -26,7 +27,7 @@ class TestPlayer:
         user1 = player.User()
         user1.hand = [self.hertz_ace, self.spade_king]
         user1.stand()
-        assert user1.score == BLACK_JACK_VALUE
+        assert user1.score == ScoreRules.BLACK_JACK_VALUE.value
 
         # エース、キング、9
         user2 = player.User()
@@ -38,10 +39,11 @@ class TestPlayer:
         user3 = player.User()
         user3.hand = [self.hertz_ace, self.spade_king, self.diamond_queen]
         user3.stand()
-        assert user3.score == BLACK_JACK_VALUE
+        assert user3.score == ScoreRules.BLACK_JACK_VALUE.value
 
         # エース、エース、エース、9
         user4 = player.User()
         user4.hand = [self.hertz_ace, self.hertz_ace, self.hertz_ace, self.club_9]
         user4.stand()
         assert user4.score == 12
+
