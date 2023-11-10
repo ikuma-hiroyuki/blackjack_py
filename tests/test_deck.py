@@ -5,6 +5,8 @@ from deck import Deck
 
 
 class TestDeck:
+    """デッキクラスをテストする"""
+
     def test_create_card(self):
         """カードを生成して絵柄とスコア、色、エースかどうかをテストする"""
 
