@@ -58,4 +58,4 @@ class ArtManager:
     @property
     def title(self):
         """タイトルのアスキーアートを返す"""
-        return self._get_ascii_art('title.txt')
+        return self._get_ascii_art('blackjack.txt')
