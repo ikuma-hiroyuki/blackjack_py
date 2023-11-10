@@ -18,29 +18,29 @@ class Player:
         self.is_burst = False
         self.hand: list[Card] = []
 
-    def hit(self):
+    def hit(self, *args):
         """カードを1枚引いてスコアを計算する"""
 
         random_index = random.randint(0, len(self.deck.card_list) - 1)
         self.hand.append(self.deck.card_list.pop(random_index))
-        self._calculate_score()
-        if self.score > ScoreRules.BLACK_JACK_VALUE:
+        self.calculate_score()
+        if self.score > ScoreRules.BLACK_JACK_VALUE.value:
             self.is_burst = True
 
     def stand(self):
         """スタンドしてスコアを計算する"""
 
         self.is_stand = True
-        self._calculate_score()
+        self.calculate_score()
 
-    def _calculate_score(self):
+    def calculate_score(self):
         """手札のスコアを計算する"""
 
         initial_score = sum(card.score for card in self.hand)
         ace_count = sum(1 for card in self.hand if card.is_ace)
 
         adjusted_score = initial_score
-        while adjusted_score > ScoreRules.BLACK_JACK_VALUE and ace_count > 0:
+        while adjusted_score > ScoreRules.BLACK_JACK_VALUE.value and ace_count > 0:
             adjusted_score -= 10
             ace_count -= 1
         self.score = adjusted_score
@@ -80,37 +80,23 @@ class Player:
 class User(Player):
     def __init__(self):
         super().__init__('ユーザー')
-        self.money = 0
+        self.money = 1000
+
+    @staticmethod
+    def ask_stand():
+        """スタンドするかどうか尋ねる"""
+        return bool(
+            input('ヒットする場合は何も入力しない。スタンドする場合は何か入力してエンターキーを押してください。: '))
 
 
 class Dealer(Player):
     def __init__(self):
         super().__init__('ディーラー')
 
-    def hit(self):
-        """スコアが17以上になるまでカードを引く"""
-        while self.score < ScoreRules.DEALER_MIN_VALUE:
-            super().hit()
-        super().stand()
+    def show_card_face(self, num_visible_cards):
+        Player.show_card_face(self, num_visible_cards)
 
     def reset_deal(self):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
         super().reset_deal()
-        self.deck = Deck()
-
-
-if __name__ == '__main__':
-    print('User')
-    user = User()
-    user.hit()
-    user.hit()
-    user.show_all_face_and_score()
-    print()
-
-    print('Dealer')
-    dealer = Dealer()
-    Player.hit(dealer)
-    dealer.show_card_face(1)
-    dealer.hit()
-    dealer.show_card_face(num_visible_cards=1)
-    dealer.show_all_face_and_score()
+        Player.deck = Deck()
