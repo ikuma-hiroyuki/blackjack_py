@@ -1,8 +1,9 @@
 import random
+from enum import Enum, auto
 
 from card import Card
 from deck import Deck
-from rules.score_rules import ScoreRules
+from rules import ScoreRules
 
 
 class Player:
@@ -81,6 +82,10 @@ class User(Player):
     def __init__(self):
         super().__init__('ユーザー')
         self._money = 1000
+        self.game_result = UserGameState.INIT
+        self.bet_amount = 0
+        self.bet_distribute_rate = 0
+        self.is_natural_blackjack = False
 
     @property
     def money(self):
@@ -89,6 +94,19 @@ class User(Player):
     @money.setter
     def money(self, value):
         self._money = int(value)
+
+    @property
+    def bet_result_amount(self):
+        """掛け金の結果を返す"""
+        return int(self.bet_amount * self.bet_distribute_rate)
+
+    def reset_deal(self):
+        """リセットして次の勝負に備える"""
+        super().reset_deal()
+        self.game_result = UserGameState.INIT
+        self.bet_amount = 0
+        self.bet_distribute_rate = 0
+        self.is_natural_blackjack = False
 
 
 class Dealer(Player):
@@ -99,3 +117,11 @@ class Dealer(Player):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
         super().reset_deal()
         Player.deck = Deck()
+
+
+class UserGameState(Enum):
+    """ユーザーの勝敗結果状態を表す列挙型"""
+    INIT = auto()
+    WIN = auto()
+    DRAW = auto()
+    LOSE = auto()
