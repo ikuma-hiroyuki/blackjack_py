@@ -24,7 +24,7 @@ class Player:
         random_index = random.randint(0, len(self.deck.card_list) - 1)
         self.hand.append(self.deck.card_list.pop(random_index))
         self.calculate_score()
-        if self.score > ScoreRules.BLACK_JACK_VALUE.value:
+        if self.score > ScoreRules.BLACK_JACK.value:
             self.is_burst = True
 
     def stand(self):
@@ -40,7 +40,7 @@ class Player:
         ace_count = sum(1 for card in self.hand if card.is_ace)
 
         adjusted_score = initial_score
-        while adjusted_score > ScoreRules.BLACK_JACK_VALUE.value and ace_count > 0:
+        while adjusted_score > ScoreRules.BLACK_JACK.value and ace_count > 0:
             adjusted_score -= 10
             ace_count -= 1
         self.score = adjusted_score

@@ -27,7 +27,7 @@ class TestPlayer:
         user1 = player.User()
         user1.hand = [self.hertz_ace, self.spade_king]
         user1.stand()
-        assert user1.score == ScoreRules.BLACK_JACK_VALUE.value
+        assert user1.score == ScoreRules.BLACK_JACK.value
 
         # エース、キング、9
         user2 = player.User()
@@ -39,7 +39,7 @@ class TestPlayer:
         user3 = player.User()
         user3.hand = [self.hertz_ace, self.spade_king, self.diamond_queen]
         user3.stand()
-        assert user3.score == ScoreRules.BLACK_JACK_VALUE.value
+        assert user3.score == ScoreRules.BLACK_JACK.value
 
         # エース、エース、エース、9
         user4 = player.User()

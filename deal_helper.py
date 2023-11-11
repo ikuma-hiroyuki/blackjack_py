@@ -4,8 +4,8 @@ from enum import Enum
 
 class ScoreRules(Enum):
     """スコア計算に関するルールを表す列挙型"""
-    BLACK_JACK_VALUE = 21
-    DEALER_MIN_VALUE = 17
+    BLACK_JACK = 21
+    DEALER_MIN = 17
 
 
 class Odds(Enum):
