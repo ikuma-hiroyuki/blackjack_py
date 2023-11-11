@@ -1,4 +1,3 @@
-import random
 from enum import Enum, auto
 
 from card import Card, Deck
@@ -21,8 +20,7 @@ class Player:
     def hit(self, *args):
         """カードを1枚引いてスコアを計算する"""
 
-        random_index = random.randint(0, len(self.deck.card_list) - 1)
-        self.hand.append(self.deck.card_list.pop(random_index))
+        self.hand.append(self.deck.card_list.pop(0))
         self.calculate_score()
         if self.score > ScoreRules.BLACK_JACK.value:
             self.is_burst = True
