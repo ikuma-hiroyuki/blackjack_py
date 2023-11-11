@@ -70,7 +70,7 @@ class GameManager:
             else:
                 self.user.hit()
             self.show_helper.show_user_turn_hands()
-            self.show_helper.check_natural_blackjack()
+            self.show_helper.show_natulal_blackjack_if_natulal()
 
     def _dealer_turn(self):
         """ディーラーのターン"""
@@ -115,11 +115,11 @@ class GameManager:
             if self.user.is_burst or self.dealer.is_burst:
                 return False
 
-            if self.dealer.score >= ScoreRules.DEALER_MIN_VALUE.value:
+            if self.dealer.score >= ScoreRules.DEALER_MIN.value:
                 if self.dealer.score > self.user.score:
                     return False
                 if self.dealer.score == self.user.score:
-                    return self.dealer.score != ScoreRules.BLACK_JACK_VALUE.value
+                    return self.dealer.score != ScoreRules.BLACK_JACK.value
 
             # ディーラーのスコアが17点未満の場合、常にカードを引く
             return True
@@ -195,17 +195,16 @@ class GameManager:
             self.dealer.show_all_face_and_score()
             print()
 
-        def check_natural_blackjack(self):
+        def show_blackjack_if_natural(self):
             """
             ユーザーがナチュラルブラックジャックかどうか判定し、そうだったらAAを表示する
             """
 
-            result = (self.user.score == ScoreRules.BLACK_JACK_VALUE.value
-                      and len(self.user.hand) == 2)
-            if result:
+            is_natural = self.user.score == ScoreRules.BLACK_JACK.value and len(self.user.hand) == 2
+            if is_natural:
                 print(self.art.blackjack)
                 input("ブラックジャック！")
-                self.user.is_natural_blackjack = result
+                self.user.is_natural_blackjack = is_natural
 
 
 if __name__ == '__main__':
