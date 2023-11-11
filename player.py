@@ -1,27 +1,8 @@
 import random
-from enum import Enum, auto
 
 from card import Card
 from deck import Deck
 from rules.score_rules import ScoreRules
-
-
-class UserGameState(Enum):
-    """ユーザーの勝敗結果状態を表す列挙型"""
-    INIT = auto()
-    WIN = auto()
-    DRAW = auto()
-    LOSE = auto()
-
-
-class UserState:
-    """ユーザーの状態を管理するクラス"""
-
-    def __init__(self):
-        self.game_result = UserGameState.INIT
-        self.bet_amount = 0
-        self.bet_distribute_rate = 0
-        self.is_natural_blackjack = False
 
 
 class Player:
@@ -99,21 +80,20 @@ class Player:
 class User(Player):
     def __init__(self):
         super().__init__('ユーザー')
-        self.money = 1000
+        self._money = 1000
 
-    @staticmethod
-    def ask_stand():
-        """スタンドするかどうか尋ねる"""
-        return bool(
-            input('ヒットする場合は何も入力しない。スタンドする場合は何か入力してエンターキーを押してください。: '))
+    @property
+    def money(self):
+        return self._money
+
+    @money.setter
+    def money(self, value):
+        self._money = int(value)
 
 
 class Dealer(Player):
     def __init__(self):
         super().__init__('ディーラー')
-
-    def show_card_face(self, num_visible_cards):
-        Player.show_card_face(self, num_visible_cards)
 
     def reset_deal(self):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
