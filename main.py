@@ -13,8 +13,8 @@ class GameManager:
         self.user = User()
         self.dealer = Dealer()
         self.players = [self.user, self.dealer]  # ユーザー、ディーラーの順番でカードを配る
-        self.judge_helper = self.GameJudge(self.user, self.dealer, self.art)
-        self.show_helper = self.ShowArtAndMessage(self.user, self.dealer, self.art)
+        self.judge_helper = self.GameJudge(self)
+        self.show_helper = self.ShowArtAndMessage(self)
 
     def play_game(self):
         """ゲームを開始する"""
@@ -92,10 +92,10 @@ class GameManager:
     class GameJudge:
         """ディーラーがカードを引くかどうかや、ゲームの勝敗を判定するクラス"""
 
-        def __init__(self, user: User, dealer: Dealer, art: ArtManager):
-            self.user = user
-            self.dealer = dealer
-            self.art = art
+        def __init__(self, manager):
+            self.user = manager.user
+            self.dealer = manager.dealer
+            self.art = manager.art
 
         def dealer_should_draw_card(self):
             """
@@ -166,10 +166,10 @@ class GameManager:
     class ShowArtAndMessage:
         """AAとメッセージを表示するクラス"""
 
-        def __init__(self, user: User, dealer: Dealer, art: ArtManager):
-            self.user = user
-            self.dealer = dealer
-            self.art = art
+        def __init__(self, manager):
+            self.user = manager.user
+            self.dealer = manager.dealer
+            self.art = manager.art
 
         def show_bets_result(self):
             """掛け金の結果を表示する"""
