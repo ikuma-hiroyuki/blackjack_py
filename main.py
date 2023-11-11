@@ -13,8 +13,8 @@ class GameManager:
         self.user = User()
         self.dealer = Dealer()
         self.players = [self.user, self.dealer]  # ユーザー、ディーラーの順番でカードを配る
-        self.show_helper = self.ShowArtAndMessage(self.user, self.dealer, self.art)
         self.judge_helper = self.GameJudge(self.user, self.dealer, self.art)
+        self.show_helper = self.ShowArtAndMessage(self.user, self.dealer, self.art)
 
     def play_game(self):
         """ゲームを開始する"""
