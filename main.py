@@ -40,7 +40,7 @@ class GameManager:
 
         self.user.bet_amount = deal_helper.ask_bets(self.user.money)
         self._deal_card()
-        self.show_helper.show_initial_hands()
+        self.show_helper.show_user_turn_hands()
 
         for player in self.players:
             if isinstance(player, User):
@@ -49,7 +49,7 @@ class GameManager:
             if isinstance(player, Dealer):
                 self._dealer_turn()
 
-        self.show_helper.show_final_hands()
+        self.show_helper.show_dealer_turn_hands()
         self.judge_helper.evaluate_judge()
         self._distribute_bets()
         self.show_helper.show_bets_result()
@@ -69,13 +69,13 @@ class GameManager:
                 self.user.stand()
             else:
                 self.user.hit()
-            self.show_helper.show_initial_hands()
+            self.show_helper.show_user_turn_hands()
             self.show_helper.check_natural_blackjack()
 
     def _dealer_turn(self):
         """ディーラーのターン"""
         while self.judge_helper.dealer_should_draw_card():
-            self.show_helper.show_final_hands()
+            self.show_helper.show_dealer_turn_hands()
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
@@ -179,7 +179,7 @@ class GameManager:
             else:
                 print(f'{-self.user.bet_result_amount}円負け...')
 
-        def show_initial_hands(self):
+        def show_user_turn_hands(self):
             """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
             deal_helper.clear_terminal()
             print(f'掛け金: {self.user.bet_amount}')
@@ -187,7 +187,7 @@ class GameManager:
             self.dealer.show_card_face(num_visible_cards=1)
             print()
 
-        def show_final_hands(self):
+        def show_dealer_turn_hands(self):
             """ユーザーとディーラーの全てのカードを表にする"""
             deal_helper.clear_terminal()
             print(f'掛け金: {self.user.bet_amount}')
