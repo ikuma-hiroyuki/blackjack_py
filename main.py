@@ -1,6 +1,6 @@
 import deal_helper
 from art_manager import ArtManager
-from player import User, Dealer, Player, UserGameState
+from player import User, Dealer, Player, UserGameStateEnum
 from deal_helper import ScoreRules, Odds
 
 
@@ -138,27 +138,27 @@ class GameManager:
 
             ascii_art = ""
             if self.user.is_burst:
-                self.user.game_result = UserGameState.LOSE
+                self.user.game_result = UserGameStateEnum.LOSE
                 ascii_art = f'{self.art.burst}\n{self.art.lose}'
                 return ascii_art
 
             if self.user.score > self.dealer.score or self.dealer.is_burst:
                 ascii_art = self.art.win
-                self.user.game_result = UserGameState.WIN
+                self.user.game_result = UserGameStateEnum.WIN
             elif self.user.score == self.dealer.score:
                 ascii_art = self.art.draw
-                self.user.game_result = UserGameState.DRAW
+                self.user.game_result = UserGameStateEnum.DRAW
             else:
                 ascii_art += self.art.lose
-                self.user.game_result = UserGameState.LOSE
+                self.user.game_result = UserGameStateEnum.LOSE
 
             return ascii_art
 
         def _judge_distribute_bet(self):
             """掛け金分配率を決定する"""
-            if self.user.game_result == UserGameState.WIN:
+            if self.user.game_result == UserGameStateEnum.WIN:
                 return Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
-            elif self.user.game_result == UserGameState.DRAW:
+            elif self.user.game_result == UserGameStateEnum.DRAW:
                 return Odds.DRAW.value
             else:
                 return Odds.LOSE.value
