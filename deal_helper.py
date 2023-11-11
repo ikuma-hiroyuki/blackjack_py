@@ -10,9 +10,9 @@ class ScoreRules(Enum):
 
 class Odds(Enum):
     """掛け金分配率を表す列挙型"""
-    NATURAL_BLACK_JACK = 2.5
-    WIN = 2
-    DRAW = 1
+    NATURAL_BLACK_JACK = 1.5
+    WIN = 1
+    DRAW = 0
     LOSE = -1
 
 
