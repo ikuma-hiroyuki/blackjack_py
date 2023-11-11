@@ -1,6 +1,5 @@
 import pytest
 
-from card import Card
 from main import GameManager
 
 
@@ -64,3 +63,12 @@ class TestGameManager:
         self.manager.dealer.is_burst = False
 
         assert self.manager._dealer_should_draw_card() is False
+
+    def test_dealer_should_draw_tie_at_except_21(self):
+        """ディーラーが21点、ユーザーも21点以外で同点の場合は引く"""
+        self.manager.user.score = 20
+        self.manager.user.is_burst = False
+        self.manager.dealer.score = 20
+        self.manager.dealer.is_burst = False
+
+        assert self.manager._dealer_should_draw_card() is True
