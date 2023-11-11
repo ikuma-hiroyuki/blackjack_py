@@ -1,7 +1,5 @@
 import os
 
-from rules import ScoreRules
-
 
 def ask_stand():
     """スタンドするかどうか尋ねる"""
@@ -31,47 +29,6 @@ def ask_bets(current_money):
             print(f'掛け金は{minimum_bet_amount}円以上、かつ所持金以下の整数で入力してください。')
         else:
             return bet_amount
-
-
-class ShowArtAndMessage:
-    def __init__(self, game_manager):
-        self.game_manager = game_manager
-
-    def show_bets_result(self):
-        """掛け金の結果を表示する"""
-
-        if self.game_manager.user.bet_result_amount > 0:
-            print(f'{self.game_manager.user.bet_result_amount}円勝ち！')
-        else:
-            print(f'{-self.game_manager.user.bet_result_amount}円負け...')
-
-    def show_initial_hands(self):
-        """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
-        clear_terminal()
-        print(f'掛け金: {self.game_manager.user.bet_amount}')
-        self.game_manager.user.show_all_face_and_score()
-        self.game_manager.dealer.show_card_face(num_visible_cards=1)
-        print()
-
-    def show_final_hands(self):
-        """ユーザーとディーラーの全てのカードを表にする"""
-        clear_terminal()
-        print(f'掛け金: {self.game_manager.user.bet_amount}')
-        self.game_manager.user.show_all_face_and_score()
-        self.game_manager.dealer.show_all_face_and_score()
-        print()
-
-    def check_natural_blackjack(self):
-        """
-        ユーザーがナチュラルブラックジャックかどうか判定し、そうだったらAAを表示する
-        """
-
-        result = (self.game_manager.user.score == ScoreRules.BLACK_JACK_VALUE.value
-                  and len(self.game_manager.user.hand) == 2)
-        if result:
-            print(self.game_manager.art.blackjack)
-            input("ブラックジャック！")
-            self.game_manager.user.is_natural_blackjack = result
 
 
 def clear_terminal():

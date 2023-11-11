@@ -1,6 +1,5 @@
 import deal_helper
 from art_manager import ArtManager
-from deal_helper import ShowArtAndMessage
 from player import User, Dealer, Player, UserGameState
 from rules import ScoreRules, Odds
 
@@ -14,7 +13,8 @@ class GameManager:
         self.user = User()
         self.dealer = Dealer()
         self.players = [self.user, self.dealer]  # ユーザー、ディーラーの順番でカードを配る
-        self.show_helper = ShowArtAndMessage(self)
+        self.show_helper = self.ShowArtAndMessage(self.user, self.dealer, self.art)
+        self.judge_helper = self.GameJudge(self.user, self.dealer, self.art)
 
     def play_game(self):
         """ゲームを開始する"""
@@ -49,7 +49,8 @@ class GameManager:
             if isinstance(player, Dealer):
                 self._dealer_turn()
 
-        self._evaluate_judge()
+        self.show_helper.show_final_hands()
+        self.judge_helper.evaluate_judge()
         self._distribute_bets()
         self.show_helper.show_bets_result()
         print(f'所持金が{self.user.money}になりました。\n')
@@ -73,78 +74,11 @@ class GameManager:
 
     def _dealer_turn(self):
         """ディーラーのターン"""
-        while self._dealer_should_draw_card():
+        while self.judge_helper.dealer_should_draw_card():
             self.show_helper.show_final_hands()
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
-
-    def _dealer_should_draw_card(self):
-        """
-        ディーラーがカードを引くべきか判定する
-
-        ユーザーかディーラーがバーストしている場合は引かない
-
-        以下、ディーラーが17点以上のケース
-        ユーザーに勝っている場合は引かない
-        ディーラーとユーザーが同点の場合、21点だったら引かないが、それ以外は引く
-
-        ディーラーが17点未満の場合は常に引く(ユーザーバーストは除く)
-
-        return: True: カードを引く, False: カードを引かない
-        """
-
-        if self.user.is_burst or self.dealer.is_burst:
-            return False
-
-        if self.dealer.score >= ScoreRules.DEALER_MIN_VALUE.value:
-            if self.dealer.score > self.user.score:
-                return False
-            if self.dealer.score == self.user.score:
-                return self.dealer.score != ScoreRules.BLACK_JACK_VALUE.value
-
-        # ディーラーのスコアが17点未満の場合、常にカードを引く
-        return True
-
-    def _evaluate_judge(self):
-        """ユーザーの勝敗を判定し掛け金分配率を決定する"""
-        ascii_art = self._judge_game_and_return_ascii_art()
-        print(ascii_art)
-        self.user.bet_distribute_rate = self._judge_distribute_bet()
-
-    def _judge_game_and_return_ascii_art(self):
-        """
-        ユーザーの勝敗を判定しAAを返す
-        return: アスキーアート
-        """
-        self.show_helper.show_final_hands()
-
-        ascii_art = ""
-        if self.user.is_burst:
-            self.user.game_result = UserGameState.LOSE
-            ascii_art = f'{self.art.burst}\n{self.art.lose}'
-            return ascii_art
-
-        if self.user.score > self.dealer.score or self.dealer.is_burst:
-            ascii_art = self.art.win
-            self.user.game_result = UserGameState.WIN
-        elif self.user.score == self.dealer.score:
-            ascii_art = self.art.draw
-            self.user.game_result = UserGameState.DRAW
-        else:
-            ascii_art += self.art.lose
-            self.user.game_result = UserGameState.LOSE
-
-        return ascii_art
-
-    def _judge_distribute_bet(self):
-        """掛け金分配率を決定する"""
-        if self.user.game_result == UserGameState.WIN:
-            return Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
-        elif self.user.game_result == UserGameState.DRAW:
-            return Odds.DRAW.value
-        else:
-            return Odds.LOSE.value
 
     def _distribute_bets(self):
         """掛け金を分配する"""
@@ -154,6 +88,124 @@ class GameManager:
         """ゲームをリセットする"""
         for player in self.players:
             player.reset_deal()
+
+    class GameJudge:
+        """ディーラーがカードを引くかどうかや、ゲームの勝敗を判定するクラス"""
+
+        def __init__(self, user: User, dealer: Dealer, art: ArtManager):
+            self.user = user
+            self.dealer = dealer
+            self.art = art
+
+        def dealer_should_draw_card(self):
+            """
+            ディーラーがカードを引くべきか判定する
+
+            ユーザーかディーラーがバーストしている場合は引かない
+
+            以下、ディーラーが17点以上のケース
+            ユーザーに勝っている場合は引かない
+            ディーラーとユーザーが同点の場合、21点だったら引かないが、それ以外は引く
+
+            ディーラーが17点未満の場合は常に引く(ユーザーバーストは除く)
+
+            return: True: カードを引く, False: カードを引かない
+            """
+
+            if self.user.is_burst or self.dealer.is_burst:
+                return False
+
+            if self.dealer.score >= ScoreRules.DEALER_MIN_VALUE.value:
+                if self.dealer.score > self.user.score:
+                    return False
+                if self.dealer.score == self.user.score:
+                    return self.dealer.score != ScoreRules.BLACK_JACK_VALUE.value
+
+            # ディーラーのスコアが17点未満の場合、常にカードを引く
+            return True
+
+        def evaluate_judge(self):
+            """ユーザーの勝敗を判定し掛け金分配率を決定する"""
+            ascii_art = self._judge_game_and_return_ascii_art()
+            print(ascii_art)
+            self.user.bet_distribute_rate = self._judge_distribute_bet()
+
+        def _judge_game_and_return_ascii_art(self):
+            """
+            ユーザーの勝敗を判定しAAを返す
+            return: アスキーアート
+            """
+
+            ascii_art = ""
+            if self.user.is_burst:
+                self.user.game_result = UserGameState.LOSE
+                ascii_art = f'{self.art.burst}\n{self.art.lose}'
+                return ascii_art
+
+            if self.user.score > self.dealer.score or self.dealer.is_burst:
+                ascii_art = self.art.win
+                self.user.game_result = UserGameState.WIN
+            elif self.user.score == self.dealer.score:
+                ascii_art = self.art.draw
+                self.user.game_result = UserGameState.DRAW
+            else:
+                ascii_art += self.art.lose
+                self.user.game_result = UserGameState.LOSE
+
+            return ascii_art
+
+        def _judge_distribute_bet(self):
+            """掛け金分配率を決定する"""
+            if self.user.game_result == UserGameState.WIN:
+                return Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
+            elif self.user.game_result == UserGameState.DRAW:
+                return Odds.DRAW.value
+            else:
+                return Odds.LOSE.value
+
+    class ShowArtAndMessage:
+        """AAとメッセージを表示するクラス"""
+
+        def __init__(self, user: User, dealer: Dealer, art: ArtManager):
+            self.user = user
+            self.dealer = dealer
+            self.art = art
+
+        def show_bets_result(self):
+            """掛け金の結果を表示する"""
+
+            if self.user.bet_result_amount > 0:
+                print(f'{self.user.bet_result_amount}円勝ち！')
+            else:
+                print(f'{-self.user.bet_result_amount}円負け...')
+
+        def show_initial_hands(self):
+            """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
+            deal_helper.clear_terminal()
+            print(f'掛け金: {self.user.bet_amount}')
+            self.user.show_all_face_and_score()
+            self.dealer.show_card_face(num_visible_cards=1)
+            print()
+
+        def show_final_hands(self):
+            """ユーザーとディーラーの全てのカードを表にする"""
+            deal_helper.clear_terminal()
+            print(f'掛け金: {self.user.bet_amount}')
+            self.user.show_all_face_and_score()
+            self.dealer.show_all_face_and_score()
+            print()
+
+        def check_natural_blackjack(self):
+            """
+            ユーザーがナチュラルブラックジャックかどうか判定し、そうだったらAAを表示する
+            """
+
+            result = (self.user.score == ScoreRules.BLACK_JACK_VALUE.value
+                      and len(self.user.hand) == 2)
+            if result:
+                print(self.art.blackjack)
+                input("ブラックジャック！")
+                self.user.is_natural_blackjack = result
 
 
 if __name__ == '__main__':
