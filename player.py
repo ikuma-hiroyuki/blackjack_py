@@ -1,9 +1,8 @@
 import random
 from enum import Enum, auto
 
-from card import Card
-from deck import Deck
-from rules import ScoreRules
+from card import Card, Deck
+from deal_helper import ScoreRules
 
 
 class Player:

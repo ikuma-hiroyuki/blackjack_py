@@ -1,7 +1,7 @@
 import deal_helper
 from art_manager import ArtManager
 from player import User, Dealer, Player, UserGameState
-from rules import ScoreRules, Odds
+from deal_helper import ScoreRules, Odds
 
 
 class GameManager:

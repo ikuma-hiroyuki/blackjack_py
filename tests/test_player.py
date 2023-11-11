@@ -2,7 +2,7 @@ import pytest
 
 import player
 from card import Card
-from rules import ScoreRules
+from deal_helper import ScoreRules
 
 
 class TestPlayer:
