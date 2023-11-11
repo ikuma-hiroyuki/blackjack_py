@@ -44,10 +44,10 @@ class GameManager:
 
         for player in self.players:
             if isinstance(player, User):
-                self._user_turn()
+                self._user_draw_turn()
 
             if isinstance(player, Dealer):
-                self._dealer_turn()
+                self._dealer_draw_turn()
 
         self.show_helper.show_dealer_turn_hands()
         self.judge_helper.evaluate_judge()
@@ -62,7 +62,7 @@ class GameManager:
                 player.hand.append(Player.deck.card_list.pop())
                 player.calculate_score()
 
-    def _user_turn(self):
+    def _user_draw_turn(self):
         """ユーザーのターン"""
         while not (self.user.is_stand or self.user.is_burst):
             if deal_helper.ask_stand():
@@ -70,9 +70,9 @@ class GameManager:
             else:
                 self.user.hit()
             self.show_helper.show_user_turn_hands()
-            self.show_helper.show_natulal_blackjack_if_natulal()
+            self.show_helper.show_blackjack_if_natural()
 
-    def _dealer_turn(self):
+    def _dealer_draw_turn(self):
         """ディーラーのターン"""
         while self.judge_helper.dealer_should_draw_card():
             self.show_helper.show_dealer_turn_hands()
