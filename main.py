@@ -53,7 +53,6 @@ class GameManager:
         self.judge_helper.evaluate_judge()
         self._distribute_bets()
         self.show_helper.show_bets_result()
-        print(f'所持金が{self.user.money}になりました。\n')
 
     def _deal_card(self):
         """ゲーム開始直後にユーザーとディーラーインスタンスに2枚ずつカードを配る"""
@@ -172,12 +171,19 @@ class GameManager:
             self.art = manager.art
 
         def show_bets_result(self):
-            """掛け金の結果を表示する"""
+            """掛けの結果を表示する"""
 
             if self.user.bet_result_amount > 0:
                 print(f'{self.user.bet_result_amount}円勝ち！')
+            elif self.user.bet_result_amount == 0:
+                print('引き分け')
             else:
                 print(f'{-self.user.bet_result_amount}円負け...')
+
+            if self.user.bet_result_amount != 0:
+                print(f'所持金が{self.user.money}円になりました。\n')
+            else:
+                print(f'所持金は{self.user.money}円のままです。\n')
 
         def show_user_turn_hands(self):
             """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
@@ -208,5 +214,4 @@ class GameManager:
 
 
 if __name__ == '__main__':
-    game_manager = GameManager()
-    game_manager.play_game()
+    GameManager().play_game()
