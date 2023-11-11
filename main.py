@@ -1,5 +1,6 @@
 import deal_helper
 from art_manager import ArtManager
+from deal_helper import ShowArtAndMessage
 from player import User, Dealer, Player, UserGameState
 from rules import ScoreRules, Odds
 
@@ -13,6 +14,7 @@ class GameManager:
         self.user = User()
         self.dealer = Dealer()
         self.players = [self.user, self.dealer]  # ユーザー、ディーラーの順番でカードを配る
+        self.show_helper = ShowArtAndMessage(self)
 
     def play_game(self):
         """ゲームを開始する"""
@@ -38,7 +40,7 @@ class GameManager:
 
         self.user.bet_amount = deal_helper.ask_bets(self.user.money)
         self._deal_card()
-        self._show_initial_hands()
+        self.show_helper.show_initial_hands()
 
         for player in self.players:
             if isinstance(player, User):
@@ -49,7 +51,7 @@ class GameManager:
 
         self._evaluate_judge()
         self._distribute_bets()
-        deal_helper.show_bets_result(self.user)
+        self.show_helper.show_bets_result()
         print(f'所持金が{self.user.money}になりました。\n')
 
     def _deal_card(self):
@@ -66,13 +68,13 @@ class GameManager:
                 self.user.stand()
             else:
                 self.user.hit()
-            self._show_initial_hands()
-            self._check_natural_blackjack()
+            self.show_helper.show_initial_hands()
+            self.show_helper.check_natural_blackjack()
 
     def _dealer_turn(self):
         """ディーラーのターン"""
         while self._dealer_should_draw_card():
-            self._show_final_hands()
+            self.show_helper.show_final_hands()
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
@@ -104,33 +106,6 @@ class GameManager:
         # ディーラーのスコアが17点未満の場合、常にカードを引く
         return True
 
-    def _show_initial_hands(self):
-        """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
-        deal_helper.clear_terminal()
-        print(f'掛け金: {self.user.bet_amount}')
-        self.user.show_all_face_and_score()
-        self.dealer.show_card_face(num_visible_cards=1)
-        print()
-
-    def _show_final_hands(self):
-        """ユーザーとディーラーの全てのカードを表にする"""
-        deal_helper.clear_terminal()
-        print(f'掛け金: {self.user.bet_amount}')
-        self.user.show_all_face_and_score()
-        self.dealer.show_all_face_and_score()
-        print()
-
-    def _check_natural_blackjack(self):
-        """
-        ユーザーがナチュラルブラックジャックかどうか判定し、そうだったらAAを表示する
-        """
-
-        result = self.user.score == ScoreRules.BLACK_JACK_VALUE.value and len(self.user.hand) == 2
-        if result:
-            print(self.art.blackjack)
-            input("ブラックジャック！")
-            self.user.is_natural_blackjack = result
-
     def _evaluate_judge(self):
         """ユーザーの勝敗を判定し掛け金分配率を決定する"""
         ascii_art = self._judge_game_and_return_ascii_art()
@@ -142,7 +117,7 @@ class GameManager:
         ユーザーの勝敗を判定しAAを返す
         return: アスキーアート
         """
-        self._show_final_hands()
+        self.show_helper.show_final_hands()
 
         ascii_art = ""
         if self.user.is_burst:
