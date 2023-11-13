@@ -84,7 +84,7 @@ class GameManager:
         self.user.money += self.user.bet_amount * self.user.bet_distribute_rate
 
     def _reset_game(self):
-        """ゲームをリセットする"""
+        """1回戦分のゲームをリセットする"""
         for player in self.players:
             player.reset_deal()
 
