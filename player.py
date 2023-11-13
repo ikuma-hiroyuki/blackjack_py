@@ -94,7 +94,7 @@ class User(Player):
 
     @property
     def bet_result_amount(self):
-        """掛け金の結果を返す"""
+        """勝負の結果得た(失った)金額を返す"""
         return int(self.bet_amount * self.bet_distribute_rate)
 
     def reset_deal(self):
