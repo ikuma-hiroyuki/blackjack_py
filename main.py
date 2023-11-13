@@ -1,7 +1,7 @@
 import deal_helper
 from art_manager import ArtManager
-from player import User, Dealer, Player, UserGameStateEnum
 from deal_helper import ScoreRules, Odds
+from player import User, Dealer, Player, UserGameStateEnum
 
 
 class GameManager:
