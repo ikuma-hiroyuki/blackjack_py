@@ -46,6 +46,8 @@ class GameManager:
 
         self.judge_helper.evaluate_judge()
         self._distribute_bets()
+
+        self.show_helper.show_game_result_ascii_art()
         self.show_helper.show_bets_result()
 
     def _deal_card(self):
@@ -121,43 +123,30 @@ class GameManager:
             return True
 
         def evaluate_judge(self):
-            """ユーザーの勝敗を判定し掛け金分配率を決定する"""
-            ascii_art = self._judge_game_and_return_ascii_art()
-            print(ascii_art)
-            self.user.bet_distribute_rate = self._judge_distribute_bet()
+            """ユーザーの勝敗を判定し、掛け金分配率を決定する"""
+            self._judge_game()
+            self._judge_distribute_bet()
 
-        def _judge_game_and_return_ascii_art(self):
-            """
-            ユーザーの勝敗を判定しAAを返す
-            return: アスキーアート
-            """
-
-            ascii_art = ""
+        def _judge_game(self):
+            """ユーザーの勝敗を判定する"""
             if self.user.is_burst:
                 self.user.game_result = UserGameStateEnum.LOSE
-                ascii_art = f'{self.art.burst}\n{self.art.lose}'
-                return ascii_art
-
-            if self.user.score > self.dealer.score or self.dealer.is_burst:
-                ascii_art = self.art.win
+            elif self.user.score > self.dealer.score or self.dealer.is_burst:
                 self.user.game_result = UserGameStateEnum.WIN
             elif self.user.score == self.dealer.score:
-                ascii_art = self.art.draw
                 self.user.game_result = UserGameStateEnum.DRAW
             else:
-                ascii_art += self.art.lose
                 self.user.game_result = UserGameStateEnum.LOSE
-
-            return ascii_art
 
         def _judge_distribute_bet(self):
             """掛け金分配率を決定する"""
             if self.user.game_result == UserGameStateEnum.WIN:
-                return Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
+                winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
+                self.user.bet_distribute_rate = winning_odds
             elif self.user.game_result == UserGameStateEnum.DRAW:
-                return Odds.DRAW.value
+                self.user.bet_distribute_rate = Odds.DRAW.value
             else:
-                return Odds.LOSE.value
+                self.user.bet_distribute_rate = Odds.LOSE.value
 
     class ShowArtAndMessage:
         """AAとメッセージを表示するクラス"""
@@ -201,6 +190,17 @@ class GameManager:
             if self.user.is_natural_blackjack:
                 print(self.art.blackjack)
                 input("ブラックジャック！")
+
+        def show_game_result_ascii_art(self):
+            """勝負結果のAAを表示する"""
+            if self.user.is_burst:
+                print(self.art.burst)
+            if self.user.game_result == UserGameStateEnum.LOSE:
+                print(self.art.lose)
+            if self.user.game_result == UserGameStateEnum.WIN:
+                print(self.art.win)
+            if self.user.game_result == UserGameStateEnum.DRAW:
+                print(self.art.draw)
 
 
 if __name__ == '__main__':
