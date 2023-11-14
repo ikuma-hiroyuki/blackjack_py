@@ -116,3 +116,21 @@ class TestGameManager:
         self.manager.judge_helper.evaluate_judge()
 
         assert self.manager.user.game_result == UserGameStateEnum.DRAW
+
+    def test_deal_card(self):
+        """デッキをUser, Dealerで共有できているかテスト"""
+        user_deck = self.manager.user.deck.card_list
+        dealer_deck = self.manager.dealer.deck.card_list
+        assert len(user_deck) == 52 and len(dealer_deck) == 52
+
+        self.manager._deal_card()
+        assert len(user_deck) == 48 and len(dealer_deck) == 48
+
+        self.manager.user.hit()
+        assert len(user_deck) == 47 and len(dealer_deck) == 47
+
+        self.manager.dealer.hit()
+        assert len(user_deck) == 46 and len(dealer_deck) == 46
+
+        assert user_deck == dealer_deck
+
