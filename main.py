@@ -199,15 +199,10 @@ class GameManager:
             print()
 
         def show_blackjack_if_natural(self):
-            """
-            ユーザーがナチュラルブラックジャックかどうか判定し、そうだったらAAを表示する
-            """
-
-            is_natural = self.user.score == ScoreRules.BLACK_JACK.value and len(self.user.hand) == 2
-            if is_natural:
+            """ユーザーがナチュラルブラックジャックだったらAAを表示する"""
+            if self.user.is_natural_blackjack:
                 print(self.art.blackjack)
                 input("ブラックジャック！")
-                self.user.is_natural_blackjack = is_natural
 
 
 if __name__ == '__main__':

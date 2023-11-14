@@ -84,6 +84,11 @@ class User(Player):
         self.bet_distribute_rate = 0
         self.is_natural_blackjack = False
 
+    def hit(self):
+        """カードを1枚引いてスコアを計算し、ナチュラルブラックジャックかどうかも判定する"""
+        super().hit()
+        self.is_natural_blackjack = self.score == ScoreRules.BLACK_JACK.value and len(self.hand) == 2
+
     @property
     def money(self):
         return self._money
