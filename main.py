@@ -58,23 +58,23 @@ class GameManager:
 
     def _user_draw_turn(self):
         """ユーザーのターン"""
-        self.show_helper.show_user_turn_hands()
+        self.show_helper.show_hands(is_user_turn=True)
         while not (self.user.is_stand or self.user.is_burst):
             if deal_helper.ask_stand():
                 self.user.stand()
             else:
                 self.user.hit()
-            self.show_helper.show_user_turn_hands()
+            self.show_helper.show_hands(is_user_turn=True)
             self.show_helper.show_blackjack_if_natural()
 
     def _dealer_draw_turn(self):
         """ディーラーのターン"""
         while self.judge_helper.dealer_should_draw_card():
-            self.show_helper.show_dealer_turn_hands()
+            self.show_helper.show_hands(is_user_turn=False)
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
-        self.show_helper.show_dealer_turn_hands()
+        self.show_helper.show_hands(is_user_turn=False)
 
     def _distribute_bets(self):
         """掛け金を分配する"""
@@ -182,20 +182,18 @@ class GameManager:
             else:
                 print(f'所持金は{self.user.money}円のままです。\n')
 
-        def show_user_turn_hands(self):
-            """ユーザーの全てのカードを表に、ディーラーの1枚のカードを表にする"""
+        def show_hands(self, is_user_turn):
+            """
+            ユーザーの手札AAとスコア、ディーラーの手札AAを一枚もしくは全部とスコアを表示する
+            param is_user_turn: ユーザーのターンかどうか
+            """
             deal_helper.clear_terminal()
             print(f'掛け金: {self.user.bet_amount}')
             self.user.show_all_face_and_score()
-            self.dealer.show_card_face(num_visible_cards=1)
-            print()
-
-        def show_dealer_turn_hands(self):
-            """ユーザーとディーラーの全てのカードを表にする"""
-            deal_helper.clear_terminal()
-            print(f'掛け金: {self.user.bet_amount}')
-            self.user.show_all_face_and_score()
-            self.dealer.show_all_face_and_score()
+            if is_user_turn:
+                self.dealer.show_card_face(num_visible_cards=1)
+            else:
+                self.dealer.show_all_face_and_score()
             print()
 
         def show_blackjack_if_natural(self):
