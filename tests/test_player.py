@@ -47,3 +47,21 @@ class TestPlayer:
         user4.stand()
         assert user4.score == 12
 
+    def test_natural_blackjack(self):
+        """ナチュラルブラックジャックの判定テスト (真)"""
+        user = player.User()
+        user.deck.card_list = [self.hertz_ace, self.spade_king]
+        user.hit()
+        user.hit()
+
+        assert user.is_natural_blackjack is True
+
+    def test_not_natural_blackjack(self):
+        """ナチュラルブラックジャックの判定テスト (偽)"""
+        user = player.User()
+        user.deck.card_list = [self.hertz_ace, self.spade_king, self.club_9]
+        user.hit()
+        user.hit()
+        user.hit()
+
+        assert user.is_natural_blackjack is False
