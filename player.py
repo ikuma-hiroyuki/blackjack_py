@@ -17,7 +17,7 @@ class Player:
         self.is_burst = False
         self.hand: list[Card] = []
 
-    def hit(self, *args):
+    def hit(self):
         """カードを1枚引いてスコアを計算する"""
 
         self.hand.append(self.deck.deal_a_card())
