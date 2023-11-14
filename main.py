@@ -93,7 +93,6 @@ class GameManager:
         def __init__(self, manager):
             self.user = manager.user
             self.dealer = manager.dealer
-            self.art = manager.art
 
         def dealer_should_draw_card(self):
             """
