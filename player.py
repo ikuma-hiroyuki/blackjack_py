@@ -20,7 +20,7 @@ class Player:
     def hit(self, *args):
         """カードを1枚引いてスコアを計算する"""
 
-        self.hand.append(self.deck.card_list.pop(0))
+        self.hand.append(self.deck.deal_a_card())
         self.calculate_score()
         if self.score > ScoreRules.BLACK_JACK.value:
             self.is_burst = True

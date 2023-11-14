@@ -50,9 +50,10 @@ class GameManager:
 
     def _deal_card(self):
         """ゲーム開始直後にユーザーとディーラーインスタンスに2枚ずつカードを配る"""
-        for _ in range(2):
+        first_deal_card_num = 2
+        for _ in range(first_deal_card_num):
             for player in self.players:
-                player.hand.append(Player.deck.card_list.pop())
+                player.hand.append(Player.deck.deal_a_card())
                 player.calculate_score()
 
     def _user_draw_turn(self):

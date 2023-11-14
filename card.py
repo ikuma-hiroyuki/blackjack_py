@@ -77,3 +77,10 @@ class Deck:
             for rank, score in Card.CARD_SCORE.items():
                 self.card_list.append(Card(suit, rank))
         shuffle(self.card_list)
+
+    def deal_a_card(self):
+        """
+        デッキからカードを1枚引く
+        :return: 引いたカード
+        """
+        return self.card_list.pop()
