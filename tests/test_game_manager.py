@@ -1,6 +1,8 @@
 import pytest
 
+from card import Card
 from main import GameManager
+from player import UserGameStateEnum
 
 
 class TestGameManager:
@@ -72,3 +74,45 @@ class TestGameManager:
         self.manager.dealer.is_burst = False
 
         assert self.manager.judge_helper.dealer_should_draw_card() is True
+
+    def test_evaluate_game_user_win(self):
+        """ユーザーが勝った場合の勝敗判定"""
+        self.manager.user.score = 19
+        self.manager.user.is_burst = False
+        self.manager.user.is_stand = True
+
+        self.manager.dealer.score = 16
+        self.manager.dealer.is_burst = False
+        self.manager.dealer.is_stand = True
+
+        self.manager.judge_helper.evaluate_judge()
+
+        assert self.manager.user.game_result == UserGameStateEnum.WIN
+
+    def test_evaluate_game_user_lose(self):
+        """ユーザーが負けた場合の勝敗判定"""
+        self.manager.user.score = 16
+        self.manager.user.is_burst = False
+        self.manager.user.is_stand = True
+
+        self.manager.dealer.score = 19
+        self.manager.dealer.is_burst = False
+        self.manager.dealer.is_stand = True
+
+        self.manager.judge_helper.evaluate_judge()
+
+        assert self.manager.user.game_result == UserGameStateEnum.LOSE
+
+    def test_evaluate_game_user_draw(self):
+        """ユーザーが引き分けた場合の勝敗判定"""
+        self.manager.user.score = 16
+        self.manager.user.is_burst = False
+        self.manager.user.is_stand = True
+
+        self.manager.dealer.score = 16
+        self.manager.dealer.is_burst = False
+        self.manager.dealer.is_stand = True
+
+        self.manager.judge_helper.evaluate_judge()
+
+        assert self.manager.user.game_result == UserGameStateEnum.DRAW
