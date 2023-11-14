@@ -40,16 +40,10 @@ class GameManager:
 
         self.user.bet_amount = deal_helper.ask_bets(self.user.money)
         self._deal_card()
-        self.show_helper.show_user_turn_hands()
 
-        for player in self.players:
-            if isinstance(player, User):
-                self._user_draw_turn()
+        self._user_draw_turn()
+        self._dealer_draw_turn()
 
-            if isinstance(player, Dealer):
-                self._dealer_draw_turn()
-
-        self.show_helper.show_dealer_turn_hands()
         self.judge_helper.evaluate_judge()
         self._distribute_bets()
         self.show_helper.show_bets_result()
@@ -63,6 +57,7 @@ class GameManager:
 
     def _user_draw_turn(self):
         """ユーザーのターン"""
+        self.show_helper.show_user_turn_hands()
         while not (self.user.is_stand or self.user.is_burst):
             if deal_helper.ask_stand():
                 self.user.stand()
@@ -78,6 +73,7 @@ class GameManager:
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
+        self.show_helper.show_dealer_turn_hands()
 
     def _distribute_bets(self):
         """掛け金を分配する"""
