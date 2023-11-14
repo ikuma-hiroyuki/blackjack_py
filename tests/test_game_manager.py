@@ -1,6 +1,6 @@
 import pytest
 
-from card import Card
+from deal_helper import ScoreRules, Odds
 from main import GameManager
 from player import UserGameStateEnum
 
@@ -134,3 +134,34 @@ class TestGameManager:
 
         assert user_deck == dealer_deck
 
+    def test_odds_natural_bj(self):
+        """ナチュラルブラックジャックの掛け金分配率テスト"""
+        self.manager.user.is_natural_blackjack = True
+        self.manager.user.score = ScoreRules.BLACK_JACK.value
+        self.manager.dealer.score = 20
+        self.manager.judge_helper.evaluate_judge()
+        assert self.manager.user.bet_distribute_rate == Odds.NATURAL_BLACK_JACK.value
+
+    def test_odds_win(self):
+        """勝利時の掛け金分配率テスト"""
+        self.manager.user.is_natural_blackjack = False
+        self.manager.user.score = 20
+        self.manager.dealer.score = 19
+        self.manager.judge_helper.evaluate_judge()
+        assert self.manager.user.bet_distribute_rate == Odds.WIN.value
+
+    def test_odds_draw(self):
+        """引き分け時の掛け金分配率テスト"""
+        self.manager.user.is_natural_blackjack = False
+        self.manager.user.score = 20
+        self.manager.dealer.score = 20
+        self.manager.judge_helper.evaluate_judge()
+        assert self.manager.user.bet_distribute_rate == Odds.DRAW.value
+
+    def test_odds_lose(self):
+        """敗北時の掛け金分配率テスト"""
+        self.manager.user.is_natural_blackjack = False
+        self.manager.user.score = 19
+        self.manager.dealer.score = 20
+        self.manager.judge_helper.evaluate_judge()
+        assert self.manager.user.bet_distribute_rate == Odds.LOSE.value
