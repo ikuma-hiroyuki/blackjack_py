@@ -1,7 +1,7 @@
 import deal_helper
 from art_manager import ArtManager
 from deal_helper import ScoreRules, Odds
-from player import User, Dealer, Player, UserGameStateEnum
+from player import User, Dealer, Player, UserGameState
 
 
 class GameManager:
@@ -129,20 +129,20 @@ class GameManager:
         def _judge_game(self):
             """ユーザーの勝敗を判定する"""
             if self.user.is_burst:
-                self.user.game_result = UserGameStateEnum.LOSE
+                self.user.game_result = UserGameState.LOSE
             elif self.user.score > self.dealer.score or self.dealer.is_burst:
-                self.user.game_result = UserGameStateEnum.WIN
+                self.user.game_result = UserGameState.WIN
             elif self.user.score == self.dealer.score:
-                self.user.game_result = UserGameStateEnum.DRAW
+                self.user.game_result = UserGameState.DRAW
             else:
-                self.user.game_result = UserGameStateEnum.LOSE
+                self.user.game_result = UserGameState.LOSE
 
         def _judge_distribute_bet(self):
             """掛け金分配率を決定する"""
-            if self.user.game_result == UserGameStateEnum.WIN:
+            if self.user.game_result == UserGameState.WIN:
                 winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
                 self.user.bet_distribute_rate = winning_odds
-            elif self.user.game_result == UserGameStateEnum.DRAW:
+            elif self.user.game_result == UserGameState.DRAW:
                 self.user.bet_distribute_rate = Odds.DRAW.value
             else:
                 self.user.bet_distribute_rate = Odds.LOSE.value
@@ -194,11 +194,11 @@ class GameManager:
             """勝負結果のAAを表示する"""
             if self.user.is_burst:
                 print(self.art.burst)
-            if self.user.game_result == UserGameStateEnum.LOSE:
+            if self.user.game_result == UserGameState.LOSE:
                 print(self.art.lose)
-            if self.user.game_result == UserGameStateEnum.WIN:
+            if self.user.game_result == UserGameState.WIN:
                 print(self.art.win)
-            if self.user.game_result == UserGameStateEnum.DRAW:
+            if self.user.game_result == UserGameState.DRAW:
                 print(self.art.draw)
 
 

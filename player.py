@@ -79,7 +79,7 @@ class User(Player):
     def __init__(self):
         super().__init__('ユーザー')
         self._money = 1000
-        self.game_result = UserGameStateEnum.INIT
+        self.game_result = UserGameState.INIT
         self.bet_amount = 0
         self.bet_distribute_rate = 0
         self.is_natural_blackjack = False
@@ -105,7 +105,7 @@ class User(Player):
     def reset_deal(self):
         """リセットして次の勝負に備える"""
         super().reset_deal()
-        self.game_result = UserGameStateEnum.INIT
+        self.game_result = UserGameState.INIT
         self.bet_amount = 0
         self.bet_distribute_rate = 0
         self.is_natural_blackjack = False
@@ -121,7 +121,7 @@ class Dealer(Player):
         Player.deck = Deck()
 
 
-class UserGameStateEnum(Enum):
+class UserGameState(Enum):
     """ユーザーの勝敗結果状態を表す列挙型"""
     INIT = auto()
     WIN = auto()

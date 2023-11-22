@@ -2,7 +2,7 @@ import pytest
 
 from deal_helper import ScoreRules, Odds
 from main import GameManager
-from player import UserGameStateEnum
+from player import UserGameState
 
 
 class TestGameManager:
@@ -90,7 +90,7 @@ class TestGameManager:
 
         self.manager.judge_helper.evaluate_judge()
 
-        assert self.user.game_result == UserGameStateEnum.WIN
+        assert self.user.game_result == UserGameState.WIN
 
     def test_evaluate_game_user_lose(self):
         """ユーザーが負けた場合の勝敗判定"""
@@ -104,7 +104,7 @@ class TestGameManager:
 
         self.manager.judge_helper.evaluate_judge()
 
-        assert self.user.game_result == UserGameStateEnum.LOSE
+        assert self.user.game_result == UserGameState.LOSE
 
     def test_evaluate_game_user_draw(self):
         """ユーザーが引き分けた場合の勝敗判定"""
@@ -118,7 +118,7 @@ class TestGameManager:
 
         self.manager.judge_helper.evaluate_judge()
 
-        assert self.user.game_result == UserGameStateEnum.DRAW
+        assert self.user.game_result == UserGameState.DRAW
 
     def test_deal_card(self):
         """デッキをUser, Dealerで共有できているかテスト"""
