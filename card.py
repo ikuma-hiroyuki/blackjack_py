@@ -40,7 +40,7 @@ class Card:
 
     @classmethod
     def _set_color(cls, suit, value):
-        return f"{cls.SUITS[suit]}{value}" + colorama.Fore.RESET
+        return f"{cls.SUITS[suit]}{value}{colorama.Fore.RESET}"
 
     def _create_card_ascii_art(self):
         """
