@@ -4,6 +4,14 @@ from card import Card, Deck
 from deal_helper import ScoreRules
 
 
+class UserGameState(Enum):
+    """ユーザーの勝敗結果状態を表す列挙型"""
+    INIT = auto()
+    WIN = auto()
+    DRAW = auto()
+    LOSE = auto()
+
+
 class Player:
     """プレイヤーを表すクラス"""
 
@@ -119,11 +127,3 @@ class Dealer(Player):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
         super().reset_deal()
         Player.deck = Deck()
-
-
-class UserGameState(Enum):
-    """ユーザーの勝敗結果状態を表す列挙型"""
-    INIT = auto()
-    WIN = auto()
-    DRAW = auto()
-    LOSE = auto()
