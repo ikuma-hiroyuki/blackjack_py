@@ -73,7 +73,6 @@ class Player:
         self.is_stand = False
         self.is_burst = False
         self.hand = []
-        self.deck = Deck()
 
 
 class User(Player):
@@ -115,6 +114,11 @@ class User(Player):
 class Dealer(Player):
     def __init__(self):
         super().__init__('ディーラー')
+
+    def reset_deal(self):
+        """リセットして次の勝負に備えるとともに、デッキをリセットする"""
+        super().reset_deal()
+        Player.deck = Deck()
 
 
 class UserGameState(Enum):
