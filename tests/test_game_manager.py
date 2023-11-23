@@ -120,6 +120,20 @@ class TestGameManager:
 
         assert self.user.game_result == UserGameState.DRAW
 
+    def test_evaluate_game_user_and_dealer_burst(self):
+        """双方がバーストした場合の勝敗判定"""
+        self.user.score = 22
+        self.user.is_burst = True
+        self.user.is_stand = True
+
+        self.dealer.score = 22
+        self.dealer.is_burst = True
+        self.dealer.is_stand = True
+
+        self.manager.judge_helper.evaluate_judge()
+
+        assert self.user.game_result == UserGameState.LOSE
+
     def test_deal_card(self):
         """デッキをUser, Dealerで共有できているかテスト"""
         user_deck = self.user.deck.card_list
