@@ -102,8 +102,8 @@ class User(Player):
         return self._money
 
     @money.setter
-    def money(self, value):
-        self._money = int(value)
+    def money(self, amount):
+        self._money = int(amount)
 
     @property
     def bet_result_amount(self):
