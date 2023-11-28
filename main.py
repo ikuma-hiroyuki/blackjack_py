@@ -55,8 +55,7 @@ class GameManager:
         first_deal_card_num = 2
         for _ in range(first_deal_card_num):
             for player in self.players:
-                player.hand.append(Player.deck.deal_a_card())
-                player.calculate_score()
+                player.hit()
 
     def _user_draw_turn(self):
         """ユーザーのターン"""
