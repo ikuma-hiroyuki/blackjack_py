@@ -136,8 +136,8 @@ class TestGameManager:
 
     def test_deal_card(self):
         """デッキをUser, Dealerで共有できているかテスト"""
-        user_deck = self.user.deck.card_list
-        dealer_deck = self.dealer.deck.card_list
+        user_deck = self.user._deck.card_list
+        dealer_deck = self.dealer._deck.card_list
         assert len(user_deck) == 52 and len(dealer_deck) == 52
 
         self.manager._deal_card()

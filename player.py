@@ -16,7 +16,7 @@ class Player:
     """プレイヤーを表すクラス"""
 
     # プレイヤー間で共通して使うデッキ
-    deck = Deck()
+    _deck = Deck()
 
     def __init__(self, name):
         self.name = name
@@ -28,7 +28,7 @@ class Player:
     def hit(self):
         """カードを1枚引いてスコアを計算する"""
 
-        self.hand.append(self.deck.deal_a_card())
+        self.hand.append(self._deck.deal_a_card())
         self.calculate_score()
         if self.score > ScoreRules.BLACK_JACK.value:
             self.is_burst = True
@@ -126,4 +126,4 @@ class Dealer(Player):
     def reset_deal(self):
         """リセットして次の勝負に備えるとともに、デッキをリセットする"""
         super().reset_deal()
-        Player.deck = Deck()
+        Player._deck = Deck()

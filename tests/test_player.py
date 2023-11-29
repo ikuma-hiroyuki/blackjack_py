@@ -50,7 +50,7 @@ class TestPlayer:
     def test_natural_blackjack(self):
         """ナチュラルブラックジャックの判定テスト (真)"""
         user = player.User()
-        user.deck.card_list = [self.hertz_ace, self.spade_king]
+        user._deck.card_list = [self.hertz_ace, self.spade_king]
         user.hit()
         user.hit()
 
@@ -59,7 +59,7 @@ class TestPlayer:
     def test_not_natural_blackjack(self):
         """ナチュラルブラックジャックの判定テスト (偽)"""
         user = player.User()
-        user.deck.card_list = [self.hertz_ace, self.spade_king, self.club_9]
+        user._deck.card_list = [self.hertz_ace, self.spade_king, self.club_9]
         user.hit()
         user.hit()
         user.hit()
