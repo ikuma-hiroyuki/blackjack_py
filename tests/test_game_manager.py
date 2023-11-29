@@ -15,10 +15,7 @@ class TestGameManager:
         self.dealer = self.manager.dealer
 
     def test_dealer_should_draw_above_17_and_winning(self):
-        """
-        ディーラーがカードを引くべきかテストする
-        ディーラーが17点以上かつユーザーに勝っている場合は引かない
-        """
+        """ディーラーが17点以上かつユーザーに勝っている場合は引かない"""
 
         self.user.score = 16
         self.user.is_burst = False
@@ -28,7 +25,7 @@ class TestGameManager:
         assert self.manager.judge_helper.dealer_should_draw_card() is False
 
     def test_dealer_should_draw_under_17_winning(self):
-        """ディーラーが17点未満でもユーザーに勝っている場合は引く"""
+        """ディーラーがユーザーに得点で勝っていても17点未満の場合は引く"""
         self.user.score = 4
         self.user.is_burst = False
         self.dealer.score = 16
@@ -37,10 +34,18 @@ class TestGameManager:
         assert self.manager.judge_helper.dealer_should_draw_card() is True
 
     def test_dealer_should_draw_user_burst(self):
-        """ユーザーがバーストしている場合は引かない"""
+        """ユーザーがバーストし、ディーラーが17点未満の場合は引く"""
         self.user.score = 22
         self.user.is_burst = True
         self.dealer.score = 10
+
+        assert self.manager.judge_helper.dealer_should_draw_card() is True
+
+    def test_dealer_should_draw_user_burst_and_17(self):
+        """ユーザーがバーストし、ディーラーが17点以上の場合は引かない"""
+        self.user.score = 22
+        self.user.is_burst = True
+        self.dealer.score = 17
 
         assert self.manager.judge_helper.dealer_should_draw_card() is False
 

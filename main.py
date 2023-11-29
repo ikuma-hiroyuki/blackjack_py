@@ -108,10 +108,12 @@ class GameManager:
             return: True: カードを引く, False: カードを引かない
             """
 
-            if self.user.is_burst or self.dealer.is_burst:
+            if self.dealer.is_burst:
                 return False
 
             if self.dealer.score >= ScoreRules.DEALER_MIN.value:
+                if self.user.is_burst:
+                    return False
                 if self.dealer.score > self.user.score:
                     return False
                 if self.dealer.score == self.user.score:
