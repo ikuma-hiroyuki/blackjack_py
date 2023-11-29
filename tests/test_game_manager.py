@@ -5,14 +5,31 @@ from main import GameManager
 from player import UserGameState
 
 
-class TestGameManager:
-    """ゲームの進行のテスト"""
+class TestDealerShouldDrawCard:
+    """ディーラーがカードを引くかどうかのテスト"""
 
     @pytest.fixture(autouse=True)
     def setup(self):
         self.manager = GameManager()
         self.user = self.manager.user
         self.dealer = self.manager.dealer
+
+    def test_deal_card(self):
+        """デッキをUser, Dealerで共有できているかテスト"""
+        user_deck = self.user._deck.card_list
+        dealer_deck = self.dealer._deck.card_list
+        assert len(user_deck) == 52 and len(dealer_deck) == 52
+
+        self.manager._deal_card()
+        assert len(user_deck) == 48 and len(dealer_deck) == 48
+
+        self.manager.user.hit()
+        assert len(user_deck) == 47 and len(dealer_deck) == 47
+
+        self.manager.dealer.hit()
+        assert len(user_deck) == 46 and len(dealer_deck) == 46
+
+        assert user_deck == dealer_deck
 
     def test_dealer_should_draw_above_17_and_winning(self):
         """ディーラーが17点以上かつユーザーに勝っている場合は引かない"""
@@ -83,6 +100,16 @@ class TestGameManager:
 
         assert self.manager.judge_helper.dealer_should_draw_card() is True
 
+
+class TestVictoryOrDefeat:
+    """勝敗判定のテスト"""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.manager = GameManager()
+        self.user = self.manager.user
+        self.dealer = self.manager.dealer
+
     def test_evaluate_game_user_win(self):
         """ユーザーが勝った場合の勝敗判定"""
         self.user.score = 19
@@ -139,22 +166,15 @@ class TestGameManager:
 
         assert self.user.game_result == UserGameState.LOSE
 
-    def test_deal_card(self):
-        """デッキをUser, Dealerで共有できているかテスト"""
-        user_deck = self.user._deck.card_list
-        dealer_deck = self.dealer._deck.card_list
-        assert len(user_deck) == 52 and len(dealer_deck) == 52
 
-        self.manager._deal_card()
-        assert len(user_deck) == 48 and len(dealer_deck) == 48
+class TestOdds:
+    """掛け金分配率のテスト"""
 
-        self.manager.user.hit()
-        assert len(user_deck) == 47 and len(dealer_deck) == 47
-
-        self.manager.dealer.hit()
-        assert len(user_deck) == 46 and len(dealer_deck) == 46
-
-        assert user_deck == dealer_deck
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.manager = GameManager()
+        self.user = self.manager.user
+        self.dealer = self.manager.dealer
 
     def test_odds_natural_bj(self):
         """ナチュラルブラックジャックの掛け金分配率テスト"""
