@@ -1,6 +1,12 @@
-import deal_helper
 from art_manager import ArtManager
-from deal_helper import ScoreRules, Odds
+from deal_helper import (
+    ask_bets,
+    ask_stand,
+    ask_user_replay_decision,
+    clear_terminal,
+    Odds,
+    ScoreRules,
+)
 from player import User, Dealer, UserGameState
 
 
@@ -18,7 +24,7 @@ class GameManager:
 
     def play_game(self):
         """ゲームを開始する"""
-        deal_helper.clear_terminal()
+        clear_terminal()
         print(self.art.title)
         self._play_rounds()
 
@@ -26,11 +32,11 @@ class GameManager:
         """各ラウンドをプレイする"""
         while self.user.money:
             self._round_of_game()
-            if self.user.money and not deal_helper.ask_user_replay_decision():
+            if self.user.money and not ask_user_replay_decision():
                 break
 
             if self.user.money:
-                deal_helper.clear_terminal()
+                clear_terminal()
             self._reset_game()
         else:
             print('ゲームを終了します。')
@@ -38,7 +44,7 @@ class GameManager:
     def _round_of_game(self):
         """ゲームを1回戦行う"""
 
-        self.user.bet_amount = deal_helper.ask_bets(self.user.money)
+        self.user.bet_amount = ask_bets(self.user.money)
         self._deal_card()
 
         self._user_draw_turn()
@@ -61,7 +67,7 @@ class GameManager:
         """ユーザーのターン"""
         self.show_helper.show_hands(is_user_turn=True)
         while not (self.user.is_stand or self.user.is_burst):
-            if deal_helper.ask_stand():
+            if ask_stand():
                 self.user.stand()
             else:
                 self.user.hit()
@@ -97,7 +103,7 @@ class GameManager:
             """
             ディーラーがカードを引くべきか判定する
 
-            ユーザーかディーラーがバーストしている場合は引かない
+            ディーラーがバーストしている場合は引かない
 
             以下、ディーラーが17点以上のケース
             ユーザーに勝っている場合は引かない
@@ -176,7 +182,7 @@ class GameManager:
             ユーザーの手札AAとスコア、ディーラーの手札AAを一枚もしくは全部とスコアを表示する
             param is_user_turn: ユーザーのターンかどうか
             """
-            deal_helper.clear_terminal()
+            clear_terminal()
             print(f'掛け金: {self.user.bet_amount}')
             self.user.show_all_face_and_score()
             if is_user_turn:
