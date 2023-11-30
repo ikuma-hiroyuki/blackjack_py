@@ -30,20 +30,23 @@ def ask_user_replay_decision():
 def ask_bets(current_money):
     """
     掛け金をユーザーに尋ねる
+
     掛け金は1以上、かつ所持金以下の整数でなければならない
-    param current_money: 現在の所持金
+    :param: current_money: 現在の所持金
+    :return: 掛け金
     """
 
     minimum_bet_amount = 1
     while True:
-        try:
-            bet_amount = int(input(f'掛け金を入力してください。現在の所持金 {current_money}: '))
-            if bet_amount < minimum_bet_amount or bet_amount > current_money:
-                raise ValueError
-        except ValueError:
+        input_value = input(f'掛け金を入力してください。現在の所持金 {current_money}: ')
+        if not input_value.isdigit():
+            print('掛け金は整数で入力してください。')
+            continue
+        bet_amount = int(input_value)
+        if bet_amount < minimum_bet_amount or bet_amount > current_money:
             print(f'掛け金は{minimum_bet_amount}円以上、かつ所持金以下の整数で入力してください。')
-        else:
-            return bet_amount
+            continue
+        return bet_amount
 
 
 def clear_terminal():
