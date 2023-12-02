@@ -85,7 +85,7 @@ class GameManager:
 
     def _distribute_bets(self):
         """掛け金を分配する"""
-        self.user.money += self.user.bet_amount
+        self.user.money += self.user.bet_result_amount
 
     def _reset_game(self):
         """1回戦分のゲームをリセットする"""
