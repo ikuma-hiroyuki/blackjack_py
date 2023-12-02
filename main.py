@@ -38,8 +38,7 @@ class GameManager:
             if self.user.money:
                 clear_terminal()
             self._reset_game()
-        else:
-            print('ゲームを終了します。')
+        print('また遊んでね')
 
     def _round_of_game(self):
         """ゲームを1回戦行う"""
