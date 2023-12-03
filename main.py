@@ -64,26 +64,26 @@ class GameManager:
 
     def _user_draw_turn(self):
         """ユーザーのターン"""
-        self.show_helper.show_hands(is_user_turn=True)
+        self.show_helper.show_hand(is_user_turn=True)
         while not (self.user.is_stand or self.user.is_burst):
             if ask_stand():
                 self.user.stand()
             else:
                 self.user.hit()
-            self.show_helper.show_hands(is_user_turn=True)
+            self.show_helper.show_hand(is_user_turn=True)
             self.show_helper.show_blackjack_if_natural()
 
     def _dealer_draw_turn(self):
         """ディーラーのターン"""
         while self.judge_helper.dealer_should_draw_card():
-            self.show_helper.show_hands(is_user_turn=False)
+            self.show_helper.show_hand(is_user_turn=False)
             input('ディーラーのターン。エンターキーを押してください:')
             self.dealer.hit()
         self.dealer.stand()
-        self.show_helper.show_hands(is_user_turn=False)
+        self.show_helper.show_hand(is_user_turn=False)
 
     def _distribute_bets(self):
-        """掛け金を分配する"""
+        """掛け金を配分する"""
         self.user.money += self.user.bet_result_amount
 
     def _reset_game(self):
@@ -100,7 +100,7 @@ class GameManager:
 
         def dealer_should_draw_card(self):
             """
-            ディーラーがカードを引くべきか判定する
+            ディーラーがカードを引くべきかどうかを返す
 
             ディーラーがバーストしている場合は引かない
 
@@ -124,7 +124,7 @@ class GameManager:
                 if self.dealer.score == self.user.score:
                     return self.dealer.score != ScoreRules.BLACK_JACK.value
 
-            # ディーラーのスコアが17点未満の場合、常にカードを引く
+            # ディーラーが17点未満の場合は常に引く
             return True
 
         def evaluate_judge(self):
@@ -146,7 +146,7 @@ class GameManager:
         def _judge_distribute_bet(self):
             """掛け金分配率を決定する"""
             if self.user.game_result == UserGameState.WIN:
-                winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
+                winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natual_blackjack else Odds.WIN.value
                 self.user.bet_distribute_rate = winning_odds
             elif self.user.game_result == UserGameState.DRAW:
                 self.user.bet_distribute_rate = Odds.DRAW.value
@@ -163,26 +163,24 @@ class GameManager:
 
         def show_bets_result(self):
             """掛けの結果を表示する"""
-
-            if self.user.bet_result_amount > 0:
-                print(f'{self.user.bet_result_amount}円勝ち！')
-            elif self.user.bet_result_amount == 0:
-                print('引き分け')
+            if self.user.game_result == UserGameState.WIN:
+                print(f"{self.user.bet_amount}円勝ち！")
+            elif self.user.game_result == UserGameState.DRAW:
+                print("引き分け")
             else:
-                print(f'{-self.user.bet_result_amount}円負け...')
+                print(f"{self.user.bet_amount}円負け...")
 
             if self.user.bet_result_amount != 0:
-                print(f'所持金が{self.user.money}円になりました。\n')
+                print(f"所持金が{self.user.money}円になりました。\n")
             else:
-                print(f'所持金は{self.user.money}円のままです。\n')
+                print(f"所持金は{self.user.money}円のままです。\n")
 
-        def show_hands(self, is_user_turn):
+        def show_hand(self, is_user_turn):
             """
             ユーザーの手札AAとスコア、ディーラーの手札AAを一枚もしくは全部とスコアを表示する
-            param is_user_turn: ユーザーのターンかどうか
+            param: is_user_turn: ユーザーのターンかどうか
             """
             clear_terminal()
-            print(f'掛け金: {self.user.bet_amount}')
             self.user.show_all_face_and_score()
             if is_user_turn:
                 self.dealer.show_card_face(num_visible_cards=1)
@@ -192,21 +190,21 @@ class GameManager:
 
         def show_blackjack_if_natural(self):
             """ユーザーがナチュラルブラックジャックだったらAAを表示する"""
-            if self.user.is_natural_blackjack:
+            if self.user.is_natual_blackjack:
                 print(self.art.blackjack)
                 input("ブラックジャック！")
 
         def show_game_result_ascii_art(self):
-            """勝負結果のAAを表示する"""
+            """ゲームの結果をAAで表示する"""
             if self.user.is_burst:
                 print(self.art.burst)
             if self.user.game_result == UserGameState.LOSE:
                 print(self.art.lose)
-            if self.user.game_result == UserGameState.WIN:
-                print(self.art.win)
-            if self.user.game_result == UserGameState.DRAW:
+            elif self.user.game_result == UserGameState.DRAW:
                 print(self.art.draw)
+            else:
+                print(self.art.win)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     GameManager().play_game()
