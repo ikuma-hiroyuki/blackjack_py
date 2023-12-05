@@ -26,7 +26,10 @@ class GameManager:
         """ゲームを開始する"""
         clear_terminal()
         print(self.art.title)
-        self._play_rounds()
+        try:
+            self._play_rounds()
+        except KeyboardInterrupt:
+            print('また遊んでね')
 
     def _play_rounds(self):
         """各ラウンドをプレイする"""
