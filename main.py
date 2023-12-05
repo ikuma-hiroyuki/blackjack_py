@@ -29,7 +29,7 @@ class GameManager:
         try:
             self._play_rounds()
         except KeyboardInterrupt:
-            print('また遊んでね')
+            print('\nまた遊んでね')
 
     def _play_rounds(self):
         """各ラウンドをプレイする"""
