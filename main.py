@@ -149,7 +149,7 @@ class GameManager:
         def _judge_distribute_bet(self):
             """掛け金分配率を決定する"""
             if self.user.game_result == UserGameState.WIN:
-                winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natual_blackjack else Odds.WIN.value
+                winning_odds = Odds.NATURAL_BLACK_JACK.value if self.user.is_natural_blackjack else Odds.WIN.value
                 self.user.bet_distribute_rate = winning_odds
             elif self.user.game_result == UserGameState.DRAW:
                 self.user.bet_distribute_rate = Odds.DRAW.value
@@ -193,7 +193,7 @@ class GameManager:
 
         def show_blackjack_if_natural(self):
             """ユーザーがナチュラルブラックジャックだったらAAを表示する"""
-            if self.user.is_natual_blackjack:
+            if self.user.is_natural_blackjack:
                 print(self.art.blackjack)
                 input("ブラックジャック！")
 
